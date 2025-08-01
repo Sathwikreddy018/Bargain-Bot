@@ -7,7 +7,7 @@ con <- dbConnect(RMariaDB::MariaDB(),
                  dbname = "manuel projekt v4",
                  host = "localhost")
 
-warenkorb <- dbGetQuery(con, "
+cart <- dbGetQuery(con, "
   SELECT 
     s.name AS store,
     p.productname,
@@ -19,12 +19,12 @@ warenkorb <- dbGetQuery(con, "
 
 dbDisconnect(con)
 
-gesamtpreise <- aggregate(price ~ store, data = warenkorb, sum)
-gesamtpreise <- gesamtpreise[order(gesamtpreise$price), ]
+total_prices <- aggregate(price ~ store, data = cart, sum)
+total_prices <- total_prices[order(total_prices$price), ]
 
-balken <- barplot(gesamtpreise$price,
-                  names.arg = gesamtpreise$store,
-                  col = "darkorange",
-                  main = "Preisvergleich: Total Einkaufsliste pro Laden",
-                  ylab = "Gesamtkosten in CHF",
-                  las = 1)
+bars <- barplot(total_prices$price,
+                names.arg = total_prices$store,
+                col = "darkorange",
+                main = "Price Comparison: Total Shopping List per Store",
+                ylab = "Total Cost in CHF",
+                las = 1)
